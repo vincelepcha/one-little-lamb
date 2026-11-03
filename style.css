@@ -122,15 +122,27 @@ body {
 }
 
 /* Words and numbers always sit above the drawing (the hill runs underneath them) */
-.page > :not(.art) { position: relative; z-index: 1; }
+.page > :not(.art-box) { position: relative; z-index: 1; }
 .cover .foot { position: absolute; }
 
+/* The drawing sits in a box that fills its row exactly, so it can never push into the words. */
+.art-box {
+  position: relative;
+  align-self: stretch;
+  justify-self: stretch;
+  min-height: 0;
+  margin-bottom: 4px;
+}
+.art-box > .art {
+  position: absolute;
+  inset: 0;
+  margin: 0 auto;
+}
 .art {
   display: block;
   width: 100%;
   height: 100%;
   max-width: 560px;
-  min-height: 0;
   overflow: visible;
 }
 
@@ -366,13 +378,13 @@ body.is-asleep .btn-back { opacity: .3; transition: opacity 12s ease; }
     row-gap: 6px;
     padding-top: calc(var(--safe-t) + 12px);
   }
-  .art { grid-column: 1; grid-row: 1 / -1; }
+  .art-box { grid-column: 1; grid-row: 1 / -1; }
   .num { grid-column: 2; grid-row: 2; font-size: min(26vh, 120px); }
   .line { grid-column: 2; grid-row: 3; font-size: clamp(20px, 6vh, 32px); align-self: start; }
 
   .cover { grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); }
   .cover .titles { grid-column: 2; grid-row: 2; }
-  .cover .art { grid-row: 1 / -1; }
+  .cover .art-box { grid-row: 1 / -1; }
   .title { font-size: min(13vh, 60px); }
   .subtitle { font-size: min(6vh, 26px); }
 
