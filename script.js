@@ -5,8 +5,8 @@
 
   var COVER = 0, END = 9, DEDICATION = 10;
   var TURN_PAUSE = 900;          // ms: ignore a second turn this soon, so small fingers can't race ahead
-  var FIRST_DELAY = 700;         // ms before the first item appears
-  var STEP = 1200;               // ms between items, unless a page sets data-step
+  var FIRST_DELAY = 200;         // ms before the first item appears
+  var STEP = 350;                // ms between items, so a child can still count them
   var END_SLEEP_AFTER = 16000;   // ms on the End page before it fades to near-black
   var EGG_TAPS = 5, EGG_WINDOW = 3000;
 
@@ -99,7 +99,7 @@
     var nums = Array.prototype.slice.call(page.querySelectorAll(".num .c"));
     var items = Array.prototype.slice.call(page.querySelectorAll(".art .c"));
     var step = parseInt(page.getAttribute("data-step"), 10) || STEP;
-    var first = parseInt(page.getAttribute("data-first"), 10) || (FIRST_DELAY + nums.length * 1300);
+    var first = parseInt(page.getAttribute("data-first"), 10) || (FIRST_DELAY + nums.length * 350);
     var done = 0;
 
     function schedule(list, start, gap) {
@@ -110,11 +110,11 @@
         later(function () { el.classList.add("on"); }, t);
       });
     }
-    schedule(nums, FIRST_DELAY, 1300);
+    schedule(nums, FIRST_DELAY, 350);
     schedule(items, first, step);
-    done += calm() ? 0 : 2000;
+    done += calm() ? 0 : 900;
 
-    if (i === 8) later(function () { page.classList.add("is-hushed"); }, done + 2500);
+    if (i === 8) later(function () { page.classList.add("is-hushed"); }, done + 600);
     if (i === END) later(fallAsleep, Math.max(done, END_SLEEP_AFTER));
   }
 

@@ -19,8 +19,6 @@
   <rect width="512" height="512" fill="url(#s)"/>
   <circle cx="356" cy="150" r="46" fill="#FFF1D6" opacity=".1"/>
   <circle cx="356" cy="150" r="34" fill="#F6E4C0"/>
-  <path d="M338 148 q5 4.2 10 0 M362 148 q5 4.2 10 0" fill="none" stroke="#8A6F5A" stroke-width="3" stroke-linecap="round"/>
-  <path d="M349 161 q7 5.5 14 0" fill="none" stroke="#8A6F5A" stroke-width="2.6" stroke-linecap="round"/>
   <g fill="#FFE6B0"><circle cx="150" cy="140" r="4"/><circle cx="214" cy="104" r="3"/><circle cx="118" cy="212" r="2.6"/></g>
   <ellipse cx="256" cy="318" rx="190" ry="120" fill="url(#g)"/>
   <path d="M-10 512 L-10 400 Q 120 352 256 356 Q 392 360 522 404 L522 512 Z" fill="#232B58"/>

@@ -72,15 +72,6 @@
       '<g transform="translate(' + x + ' ' + (y - 17) + ')"><circle r="4.4" fill="' + colour + '"/><circle r="1.7" fill="#FFE6B0"/></g>',
       "animation-delay:" + delay + "s");
   }
-  function sleepyCloud(x, y, w) {
-    var k = w / 100, cx = x + 49 * k, cy = y + 32 * k;
-    return use("cloud", x, y, w, 52 * k) +
-      '<g transform="translate(' + cx + ' ' + cy + ') scale(' + k + ')">' +
-        '<path d="M-14 -2 q4 3.4 8 0 M6 -2 q4 3.4 8 0" fill="none" stroke="#9A7C86" stroke-width="2.2" stroke-linecap="round"/>' +
-        '<path d="M-4 6 q4 3.4 8 0" fill="none" stroke="#9A7C86" stroke-width="2" stroke-linecap="round"/>' +
-        '<circle cx="-17" cy="5" r="3.4" fill="#F4B3AE" opacity=".6"/><circle cx="17" cy="5" r="3.4" fill="#F4B3AE" opacity=".6"/>' +
-      '</g>';
-  }
   function firefly(x, y, dur, delay) {
     return amb("a-firefly",
       '<circle cx="' + x + '" cy="' + y + '" r="7" fill="#FFE6A0" opacity=".16"/><circle cx="' + x + '" cy="' + y + '" r="2.1" fill="#FFE6A0"/>',
@@ -99,6 +90,13 @@
   }
 
   /* ---------- The scenes ---------- */
+  // One little lamb, the same small size on every page, resting on the hilltop at (140, 125).
+  var L = { x: 140, y: 125, s: 1 };
+  function littleLamb(extra) {
+    var o = { x: L.x, y: L.y, s: L.s };
+    for (var k in extra) o[k] = extra[k];
+    return lamb(o);
+  }
   var scenes = {};
 
   // Cover: the lamb stands on the hill at sunset, awake, looking about.
@@ -109,93 +107,88 @@
     hill("#D9A08F") +
     flower(64, 216, "#F4A9B6", 0) + flower(80, 213, "#FFE6B0", -1.6) +
     flower(332, 214, "#F4A9B6", -0.8) + flower(348, 217, "#FFF3E6", -2.4) +
-    lamb({ x: 116, y: 93, s: 1.4, cls: "blink wag look" });
+    littleLamb({ cls: "blink wag look" });
 
-  // 1: the lamb yawns, lies down in its straw bed, closes its eyes; a blanket settles over it.
+  // 1: the lamb yawns, lies down in its straw bed and closes its eyes; a little quilt settles over it.
   scenes["page-1"] =
     hill("#D29590") +
-    '<ellipse cx="196" cy="207" rx="96" ry="15" fill="#C9955F"/>' +
-    '<path d="M112 204 l14 -5 M138 210 l16 -6 M232 209 l16 -5 M262 203 l14 -4 M178 213 l14 -4" stroke="#AD7D4C" stroke-width="2.2" stroke-linecap="round"/>' +
-    lamb({ x: 116, y: 93, s: 1.4, lying: true, asleep: true, blanket: true, cls: "act-bed" }) +
-    '<path d="M108 198 l10 -9 M286 200 l-8 -10" stroke="#D9AA72" stroke-width="2.2" stroke-linecap="round"/>';
+    '<ellipse cx="200" cy="207" rx="72" ry="12" fill="#C9955F"/>' +
+    '<path d="M140 205 l12 -4 M162 210 l13 -5 M228 209 l13 -4 M250 204 l11 -3 M196 213 l12 -3" stroke="#AD7D4C" stroke-width="2" stroke-linecap="round"/>' +
+    littleLamb({ lying: true, asleep: true, blanket: true, cls: "act-bed" });
 
-  // 2: two sleepy clouds drift in from either side; the lamb lifts its head to watch them.
+  // 2: two little clouds drift in from either side; the lamb lifts its head to watch them.
   scenes["page-2"] =
     hill("#CF9290") +
-    item("translateX(-170px)", amb("a-float", sleepyCloud(28, 22, 128)), "3.6s") +
-    item("translateX(170px)", amb("a-float a-float-late", sleepyCloud(240, 52, 116)), "3.6s") +
-    lamb({ x: 116, y: 93, s: 1.4, lying: true, cls: "act-gaze blink-slow" });
+    item("translateX(-150px)", amb("a-float", use("cloud", 40, 40, 120, 62, ' opacity=".92"'))) +
+    item("translateX(150px)", amb("a-float a-float-late", use("cloud", 236, 70, 108, 56, ' opacity=".92"'))) +
+    littleLamb({ lying: true, cls: "act-gaze blink-slow" });
 
-  // 3: three stars glide down and settle into place; the lamb looks up at each.
+  // 3: three stars glide down and settle into place; the lamb looks up.
   scenes["page-3"] =
     '<g transform="translate(0 4)"><rect x="336" y="140" width="10" height="70" rx="4" fill="#3F3972"/>' +
     '<circle cx="341" cy="126" r="30" fill="#4A4482"/><circle cx="318" cy="140" r="20" fill="#4A4482"/><circle cx="364" cy="142" r="22" fill="#4A4482"/></g>' +
     hill("#57508C") +
-    item("translate(60px, -140px) scale(.4)", amb("a-twinkle", use("star", 66, 50, 38, 38)), "2.6s") +
-    item("translate(-50px, -120px) scale(.4)", amb("a-twinkle", use("star", 182, 22, 38, 38), "animation-delay:-1.7s"), "2.6s") +
-    item("translate(40px, -150px) scale(.4)", amb("a-twinkle", use("star", 270, 62, 38, 38), "animation-delay:-3.1s"), "2.6s") +
-    lamb({ x: 92, y: 93, s: 1.4, lying: true, cls: "act-stargaze blink-slow" });
+    item("translate(50px, -120px) scale(.4)", amb("a-twinkle", use("star", 72, 56, 36, 36))) +
+    item("translate(-40px, -110px) scale(.4)", amb("a-twinkle", use("star", 176, 28, 36, 36), "animation-delay:-1.7s")) +
+    item("translate(30px, -130px) scale(.4)", amb("a-twinkle", use("star", 262, 64, 36, 36), "animation-delay:-3.1s")) +
+    littleLamb({ lying: true, cls: "act-stargaze blink-slow" });
 
-  // 4: Mum leans down and nuzzles her lamb four times; a heart floats up with each kiss.
+  // 4: four soft kisses, as four little hearts that float up from the lamb's face.
   (function () {
-    var hearts = [[146, 92], [184, 62], [226, 80], [262, 48]];
-    var out = hill("#4A4780") +
-      lamb({ x: 150, y: 73, s: 1.65, mum: true, asleep: true, cls: "act-nuzzle" }) +
-      lamb({ x: 40, y: 105, s: 1.25, lying: true, asleep: true, flip: true, cls: "breathe-slow" });
+    var hearts = [[126, 118], [154, 90], [190, 104], [218, 76]];
+    var out = hill("#4A4780") + littleLamb({ lying: true, asleep: true, cls: "breathe-slow" });
     hearts.forEach(function (h) {
-      var dx = 176 - (h[0] + 15), dy = 150 - (h[1] + 15);
-      out += item("translate(" + dx + "px, " + dy + "px) scale(.3)", amb("a-bob", use("heart", h[0], h[1], 30, 30)), "2.2s");
+      var dx = 160 - (h[0] + 13), dy = 170 - (h[1] + 13);
+      out += item("translate(" + dx + "px, " + dy + "px) scale(.3)", amb("a-bob", use("heart", h[0], h[1], 26, 26)));
     });
     scenes["page-4"] = out;
   })();
 
-  // 5: a close-up of the lamb breathing slowly; each breath drifts up as a soft puff.
+  // 5: five slow breaths drift up from the sleeping lamb as soft puffs.
   (function () {
-    var puffs = [[84, 128, 6], [68, 100, 8], [62, 68, 10], [76, 38, 12], [104, 14, 14]];
-    var out = specks() + hill("#2C3566") +
-      lamb({ x: 77, y: 41, s: 2.05, lying: true, asleep: true, cls: "breathe-deep" });
+    var puffs = [[138, 158, 4], [124, 136, 5.5], [116, 110, 7], [118, 82, 8.5], [128, 52, 10]];
+    var out = specks() + hill("#2C3566") + littleLamb({ lying: true, asleep: true, cls: "breathe-deep" });
     puffs.forEach(function (p, n) {
-      var dx = 106 - p[0], dy = 150 - p[1];
+      var dx = 154 - p[0], dy = 178 - p[1];
       out += item("translate(" + dx + "px, " + dy + "px) scale(.2)",
-        '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + p[2] + '" fill="#FFF7EC" opacity="' + (0.55 - n * 0.05).toFixed(2) + '"/>', "3s");
+        '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + p[2] + '" fill="#FFF7EC" opacity="' + (0.55 - n * 0.05).toFixed(2) + '"/>');
     });
     scenes["page-5"] = out;
   })();
 
-  // 6: dream bubbles float up from the sleeping lamb and line up in a row, each with a tiny moving picture.
+  // 6: six dream bubbles float up from the sleeping lamb and line up in a row, each with a tiny picture.
   (function () {
-    var xs = [46, 108, 169, 231, 292, 354], cy = 62;
+    var xs = [52, 111, 170, 230, 289, 348], cy = 78;
     var pics = [
       // a tiny lamb hopping over a fence
       function (x) {
-        return '<path d="M' + (x - 7) + ' 77 v-11 M' + (x + 7) + ' 77 v-11 M' + (x - 10) + ' 70 h20" stroke="#D8C7AE" stroke-width="2" stroke-linecap="round"/>' +
-          amb("a-hop", lamb({ x: x - 12, y: 52, s: 0.2 }));
+        return '<path d="M' + (x - 7) + ' ' + (cy + 15) + ' v-11 M' + (x + 7) + ' ' + (cy + 15) + ' v-11 M' + (x - 10) + ' ' + (cy + 8) + ' h20" stroke="#D8C7AE" stroke-width="2" stroke-linecap="round"/>' +
+          amb("a-hop", lamb({ x: x - 11, y: cy - 8, s: 0.18 }));
       },
-      function (x) { return amb("a-pulse", use("heart", x - 13, cy - 13, 26, 26)); },
-      function (x) { return amb("a-spin", use("star", x - 13, cy - 13, 26, 26)); },
-      function (x) { return lamb({ x: x - 16, y: cy - 10, s: 0.27, mum: true, lying: true, asleep: true }); },
-      function (x) { return amb("a-sway", use("flower", x - 12, cy - 12, 24, 24)); },
-      function (x) { return amb("a-rock", use("crescent", x - 13, cy - 13, 26, 26)); }
+      function (x) { return amb("a-pulse", use("heart", x - 12, cy - 12, 24, 24)); },
+      function (x) { return amb("a-spin", use("star", x - 12, cy - 12, 24, 24)); },
+      function (x) { return amb("a-float", use("cloud", x - 14, cy - 8, 28, 15)); },
+      function (x) { return amb("a-sway", use("flower", x - 11, cy - 11, 22, 22)); },
+      function (x) { return amb("a-rock", use("crescent", x - 12, cy - 12, 24, 24)); }
     ];
     var out = specks() + hill("#242D5C") +
-      lamb({ x: 116, y: 93, s: 1.4, lying: true, asleep: true, cls: "breathe-slow" }) +
-      '<g fill="#FFF7EC" opacity=".4"><circle cx="160" cy="120" r="3"/><circle cx="168" cy="102" r="4.5"/></g>';
+      littleLamb({ lying: true, asleep: true, cls: "breathe-slow" }) +
+      '<g fill="#FFF7EC" opacity=".4"><circle cx="172" cy="140" r="2.5"/><circle cx="178" cy="124" r="3.5"/></g>';
     xs.forEach(function (x, n) {
-      out += item("translate(" + (165 - x) + "px, 60px) scale(.15)",
-        '<circle cx="' + x + '" cy="' + cy + '" r="25" class="bubble"/>' + pics[n](x), "2.4s");
+      out += item("translate(" + (172 - x) + "px, 60px) scale(.15)",
+        '<circle cx="' + x + '" cy="' + cy + '" r="22" class="bubble"/>' + pics[n](x));
     });
     scenes["page-6"] = out;
   })();
 
-  // 7: deep night. The moon rises, fireflies drift, an owl blinks; Mum and lamb sleep curled together.
+  // 7: deep night. The moon rises, fireflies drift, an owl blinks on its branch; the lamb sleeps.
   scenes["page-7"] =
     specks() +
-    item("translateY(130px)", use("moon", 262, 8, 100, 100), "5s") +
+    item("translateY(120px)", use("moon", 262, 14, 92, 92)) +
     hill("#121738") +
     '<path d="M34 216 C38 180 42 150 52 116 L58 116 C54 150 52 180 50 216 Z" fill="#0C1030"/>' +
     '<path d="M52 128 C70 124 92 122 116 126" fill="none" stroke="#0C1030" stroke-width="6" stroke-linecap="round"/>' +
     '<circle cx="36" cy="96" r="38" fill="#0E1334"/><circle cx="70" cy="86" r="28" fill="#0E1334"/><circle cx="12" cy="120" r="24" fill="#0E1334"/>' +
-    // the owl
     '<g class="owl" transform="translate(98 112)">' +
       '<path d="M-10 -12 l3 -7 l4 6 M10 -12 l-3 -7 l-4 6" fill="#5B4E6E"/>' +
       '<ellipse cx="0" cy="0" rx="12" ry="15" fill="#5B4E6E"/><ellipse cx="0" cy="5" rx="7.5" ry="9" fill="#7A6C8A"/>' +
@@ -204,34 +197,32 @@
       '<g class="owl-lids" fill="#5B4E6E"><circle cx="-5" cy="-6" r="4.9"/><circle cx="5" cy="-6" r="4.9"/></g>' +
       '<path d="M-1.6 -2 l1.6 2.4 l1.6 -2.4 Z" fill="#E8B57A"/>' +
     '</g>' +
-    lamb({ x: 196, y: 105, s: 1.25, mum: true, lying: true, asleep: true, flip: true, cls: "breathe-slow" }) +
-    lamb({ x: 148, y: 136, s: 0.9, lying: true, asleep: true, cls: "breathe-slow" }) +
-    firefly(150, 160, 9, 0) + firefly(214, 128, 11, -3) + firefly(330, 176, 10, -6) +
-    firefly(262, 196, 12, -2) + firefly(118, 190, 9.5, -5) + firefly(372, 118, 11.5, -8);
+    littleLamb({ x: 170, lying: true, asleep: true, cls: "breathe-slow" }) +
+    firefly(150, 160, 9, 0) + firefly(220, 130, 11, -3) + firefly(330, 176, 10, -6) +
+    firefly(300, 196, 12, -2) + firefly(126, 190, 9.5, -5) + firefly(372, 128, 11.5, -8);
 
-  // 8: close-up. The lamb snuggles into Mum, both fast asleep; little z's float up, and the night hushes.
+  // 8: the lamb fast asleep under the moon; little z's float up, and the night hushes.
   scenes["page-8"] =
-    specks() + use("moon", 26, 6, 72, 72) +
+    specks() + use("moon", 270, 18, 78, 78) +
     hill("#0B0F2A") +
-    lamb({ x: 140, y: 58, s: 1.9, mum: true, lying: true, asleep: true, flip: true, cls: "breathe-slow" }) +
-    lamb({ x: 60, y: 110, s: 1.3, lying: true, asleep: true, cls: "breathe-slow" }) +
+    littleLamb({ lying: true, asleep: true, cls: "breathe-slow" }) +
     '<g class="zzz" fill="#E8E4F5" font-family="Nunito Lamb, ui-rounded, system-ui, sans-serif" font-weight="800">' +
-      amb("a-z", '<text x="96" y="130" font-size="14">z</text>') +
-      amb("a-z", '<text x="104" y="118" font-size="17">z</text>', "animation-delay:2s") +
-      amb("a-z", '<text x="114" y="104" font-size="20">z</text>', "animation-delay:4s") +
+      amb("a-z", '<text x="150" y="146" font-size="12">z</text>') +
+      amb("a-z", '<text x="157" y="134" font-size="15">z</text>', "animation-delay:2s") +
+      amb("a-z", '<text x="166" y="120" font-size="18">z</text>', "animation-delay:4s") +
     '</g>';
 
   // End: one soft light returns on the lamb.
   scenes.end =
     hill("#0A0D24") +
-    '<g class="c" style="--from:none;--dur:3s">' + glow("glow-end", 200, 168, 160, 120, 0.42) + '</g>' +
-    '<g class="end-lamb">' + lamb({ x: 116, y: 93, s: 1.4, lying: true, asleep: true, cls: "breathe-slow" }) + '</g>';
+    '<g class="c" style="--from:none">' + glow("glow-end", 200, 182, 130, 96, 0.42) + '</g>' +
+    '<g class="end-lamb">' + littleLamb({ lying: true, asleep: true, cls: "breathe-slow" }) + '</g>';
 
   // Dedication: the lamb asleep under a few stars.
   scenes.dedication =
     '<g fill="#E8E4F5" opacity=".5"><circle cx="70" cy="40" r="1.5"/><circle cx="130" cy="20" r="1.2"/><circle cx="300" cy="30" r="1.5"/><circle cx="350" cy="80" r="1.2"/></g>' +
-    glow("glow-ded", 200, 100, 120, 64, 0.3) +
-    lamb({ x: 146, y: 62, s: 0.9, lying: true, asleep: true, cls: "breathe-slow" });
+    glow("glow-ded", 200, 104, 110, 58, 0.3) +
+    lamb({ x: 155, y: 70, s: 0.75, lying: true, asleep: true, cls: "breathe-slow" });
 
   Array.prototype.forEach.call(document.querySelectorAll("svg[data-scene]"), function (svg) {
     var html = scenes[svg.getAttribute("data-scene")];
