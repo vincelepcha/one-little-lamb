@@ -40,8 +40,7 @@
             '<g fill="#F3DCE6" opacity=".8"><circle cx="72" cy="46" r="1.5"/><circle cx="86" cy="42" r="1.5"/><circle cx="98" cy="50" r="1.5"/><circle cx="78" cy="58" r="1.5"/><circle cx="92" cy="60" r="1.5"/><circle cx="64" cy="57" r="1.5"/></g>' +
           '</g>' : '') +
         '<g class="l-head">' +
-          '<ellipse cx="16" cy="27" rx="10" ry="4.6" transform="rotate(-28 16 27)" fill="' + ear + '"/>' +
-          '<ellipse cx="16" cy="27" rx="6" ry="2.2" transform="rotate(-28 16 27)" fill="#E3A9A6" opacity=".7"/>' +
+          '<ellipse cx="39" cy="38" rx="8" ry="4" transform="rotate(62 39 38)" style="transform-box:view-box" fill="' + ear + '"/>' +
           '<ellipse cx="27" cy="36" rx="15.5" ry="13.5" fill="' + face + '"/>' +
           '<g fill="' + wool + '"><circle cx="25" cy="23" r="6.5"/><circle cx="33" cy="22" r="5.5"/></g>' +
           '<circle cx="29" cy="43" r="3.4" fill="#F2A7A0" opacity=".55"/>' +
