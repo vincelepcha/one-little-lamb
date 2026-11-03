@@ -15,6 +15,6 @@ Read it at **https://vincelepcha.github.io/one-little-lamb/**
 ## Making a change
 
 1. Edit the files and push to `main`. GitHub Pages republishes in a minute or two.
-2. Then raise the version in `sw.js` (`one-little-lamb-v3` → `one-little-lamb-v4`, and so on), so phones that saved the book pick up the new copy.
+2. Then raise the version in `sw.js` (`one-little-lamb-v4` → `one-little-lamb-v5`, and so on), so phones that saved the book pick up the new copy.
 
 © 2026 Vince Lepcha. All rights reserved.
