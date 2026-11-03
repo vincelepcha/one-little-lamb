@@ -1,2 +1,2 @@
 # one-little-lamb
-One Little Lamb, a counting lullaby by Vince Lepcha
+One Little Lamb, A Counting Lullaby by Vince Lepcha
