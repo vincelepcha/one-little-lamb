@@ -96,18 +96,25 @@
   }
 
   function reveal(page, i) {
-    var items = Array.prototype.slice.call(page.querySelectorAll(".c"));
+    var nums = Array.prototype.slice.call(page.querySelectorAll(".num .c"));
+    var items = Array.prototype.slice.call(page.querySelectorAll(".art .c"));
     var step = parseInt(page.getAttribute("data-step"), 10) || STEP;
-    var first = calm() ? 0 : FIRST_DELAY;
-    var gap = calm() ? 0 : step;
+    var first = parseInt(page.getAttribute("data-first"), 10) || (FIRST_DELAY + nums.length * 1300);
+    var done = 0;
 
-    items.forEach(function (el, n) {
-      if (calm()) el.classList.add("on");
-      else later(function () { el.classList.add("on"); }, first + n * gap);
-    });
-    var done = first + Math.max(0, items.length - 1) * gap + 1200;
+    function schedule(list, start, gap) {
+      list.forEach(function (el, n) {
+        if (calm()) { el.classList.add("on"); return; }
+        var t = start + n * gap;
+        done = Math.max(done, t);
+        later(function () { el.classList.add("on"); }, t);
+      });
+    }
+    schedule(nums, FIRST_DELAY, 1300);
+    schedule(items, first, step);
+    done += calm() ? 0 : 2000;
 
-    if (i === 8) later(function () { page.classList.add("is-hushed"); }, done + 800);
+    if (i === 8) later(function () { page.classList.add("is-hushed"); }, done + 2500);
     if (i === END) later(fallAsleep, Math.max(done, END_SLEEP_AFTER));
   }
 

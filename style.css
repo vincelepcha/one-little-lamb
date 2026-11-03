@@ -205,22 +205,33 @@ body {
 
 /* ---------- Revealing items one at a time ---------- */
 
+/* Each counted thing travels in from --from (set in scenes.js) and settles. */
 .c {
   opacity: 0;
+  transform: var(--from, translateY(10px));
   transform-box: fill-box;
   transform-origin: center;
-  transition: opacity 1.2s ease, transform 1.6s cubic-bezier(.25, .6, .3, 1);
+  transition: opacity 1.4s ease, transform var(--dur, 1.6s) cubic-bezier(.3, .6, .3, 1);
 }
 .c.on { opacity: 1; transform: none; }
 
-.rise     { transform: translateY(10px); }
-.fade     { }
-.drift    { transform: translateX(-40px); transition-duration: 1.6s, 3s; }
-.pop      { transform: scale(.7); transition-duration: 1.4s, 1.8s; }
-.float    { transform: translateY(26px); transition-duration: 1.4s, 2.4s; }
-.breath   { transform: translateY(14px); transition-duration: 1.6s, 2s; }
-.moonrise { transform: translateY(90px); transition-duration: 2s, 4.5s; }
-.glow     { transition-duration: 3s; }
+/* ---------- The lamb's resting poses ---------- */
+
+.lamb *, .amb, .owl-lids { transform-box: fill-box; }
+.l-legs  { transform-origin: 50% 0; }
+.l-body  { transform-origin: 50% 100%; }
+.l-breathe { transform-origin: 50% 100%; }
+.l-tail  { transform-origin: 0% 50%; }
+.l-head  { transform-origin: 90% 75%; }
+.l-eye-open, .l-yawn { transform-origin: center; }
+.l-eye-closed, .l-yawn { opacity: 0; }
+.is-asleep .l-eye-open { opacity: 0; }
+.is-asleep .l-eye-closed { opacity: 1; }
+.is-lying .l-body { transform: translateY(10px); }
+.is-lying .l-legs { transform: scaleY(.2); }
+.act-gaze .l-head { transform: rotate(14deg); }
+.act-stargaze .l-head { transform: rotate(18deg); }
+.owl-lids { transform-origin: 50% 0; transform: scaleY(0); }
 
 /* Page 8: everything dims to almost black, the moon still smiling */
 .hushable { transition: opacity 6s ease; }
@@ -371,6 +382,93 @@ body.is-asleep .btn-back { opacity: .3; transition: opacity 12s ease; }
 
   .controls { max-width: none; }
   body[data-page="0"] .controls { justify-content: flex-end; }
+}
+
+/* ---------- Gentle life: breathing, blinking, drifting ----------
+   Only on the page being read, and only when the phone hasn't asked for reduced motion.
+   Everything is slow and smooth; nothing bounces or flashes. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-current .l-breathe { animation: breathe 2.3s ease-in-out infinite alternate; }
+  .is-current .breathe-slow .l-breathe { animation-duration: 2.8s; }
+  .is-current .breathe-deep .l-breathe { animation: breathe-deep 1.8s ease-in-out infinite alternate; }
+  .is-current .wag .l-tail { animation: wag 1.8s ease-in-out infinite alternate; }
+  .is-current .look .l-head { animation: look 5s ease-in-out infinite alternate; }
+  .is-current .blink .l-eye-open { animation: blink 5.5s ease-in-out infinite; }
+  .is-current .blink-slow .l-eye-open { animation: blink 8s ease-in-out 2s infinite; }
+
+  /* Page 1: a yawn, lying down, eyes closing, the blanket */
+  .is-current .act-bed .l-yawn { animation: yawn 2.2s ease-in-out .9s both; }
+  .is-current .act-bed .l-mouth { animation: hide-for-yawn 2.2s ease-in-out .9s both; }
+  .is-current .act-bed .l-body { animation: lie-down 2.4s ease-in-out 3s both; }
+  .is-current .act-bed .l-legs { animation: tuck 2.4s ease-in-out 3s both; }
+  .is-current .act-bed .l-eye-open { animation: fade-out 1.6s ease 5.4s both; }
+  .is-current .act-bed .l-eye-closed { animation: fade-in 1.6s ease 5.8s both; }
+  .is-current .act-bed .l-blanket { animation: blanket 2.6s ease 6.8s both; }
+
+  /* Page 2: looking up at the clouds */
+  .is-current .act-gaze .l-head { animation: gaze 3.4s ease-in-out 1.2s both; }
+  /* Page 3: looking up at each star as it lands */
+  .is-current .act-stargaze .l-head { animation: stargaze 7s ease-in-out .8s both; }
+  /* Page 4: four nuzzles from Mum */
+  .is-current .act-nuzzle .l-head { animation: nuzzle 2.4s ease-in-out .8s 4 both; }
+
+  .is-current .a-drift { animation: drift 26s ease-in-out infinite alternate; }
+  .is-current .a-drift-back { animation-direction: alternate-reverse; animation-duration: 34s; }
+  .is-current .a-float { animation: float 6s ease-in-out infinite alternate; }
+  .is-current .a-float-late { animation-delay: -3s; }
+  .is-current .a-sway { animation: sway 4.5s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+  .is-current .a-twinkle { animation: twinkle 5s ease-in-out infinite alternate; transform-origin: center; }
+  .is-current .a-bob { animation: float 5s ease-in-out infinite alternate; }
+  .is-current .a-hop { animation: hop 3.8s ease-in-out infinite; }
+  .is-current .a-pulse { animation: pulse 3s ease-in-out infinite alternate; transform-origin: center; }
+  .is-current .a-spin { animation: spin 24s linear infinite; transform-origin: center; }
+  .is-current .a-rock { animation: rock 5s ease-in-out infinite alternate; transform-origin: center; }
+  .is-current .a-firefly { animation: firefly 10s ease-in-out infinite; }
+  .is-current .owl-lids { animation: owl-blink 7s ease-in-out 1.5s infinite; }
+  .is-current .a-z { animation: zzz 6s ease-out infinite both; }
+}
+
+@keyframes breathe      { from { transform: scale(1, 1); } to { transform: scale(1.02, 1.045); } }
+@keyframes breathe-deep { from { transform: scale(1, 1); } to { transform: scale(1.03, 1.07); } }
+@keyframes wag   { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+@keyframes look  { from { transform: rotate(-4deg); } to { transform: rotate(6deg); } }
+@keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
+@keyframes yawn  { 0% { opacity: 0; transform: scale(.3); } 35%, 65% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(.3); } }
+@keyframes hide-for-yawn { 0%, 100% { opacity: 1; } 20%, 80% { opacity: 0; } }
+@keyframes lie-down { from { transform: translateY(0); } to { transform: translateY(10px); } }
+@keyframes tuck  { from { transform: scaleY(1); } to { transform: scaleY(.2); } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes blanket  { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+@keyframes gaze     { from { transform: rotate(0); } to { transform: rotate(14deg); } }
+@keyframes stargaze { 0% { transform: rotate(0); } 25% { transform: rotate(8deg); } 55% { transform: rotate(20deg); } 80% { transform: rotate(12deg); } 100% { transform: rotate(18deg); } }
+@keyframes nuzzle   { 0%, 100% { transform: rotate(0); } 45%, 60% { transform: rotate(-18deg) translate(-4px, 4px); } }
+@keyframes drift    { from { transform: translateX(0); } to { transform: translateX(44px); } }
+@keyframes float    { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+@keyframes sway     { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+@keyframes twinkle  { from { opacity: .72; transform: scale(.94); } to { opacity: 1; transform: scale(1.04); } }
+@keyframes pulse    { from { transform: scale(1); } to { transform: scale(1.1); } }
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes rock     { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+@keyframes hop {
+  0%   { transform: translate(-13px, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  50%  { transform: translate(0, -11px); }
+  85%  { opacity: 1; }
+  100% { transform: translate(13px, 0); opacity: 0; }
+}
+@keyframes firefly {
+  0%, 100% { transform: translate(0, 0); opacity: .35; }
+  25% { transform: translate(9px, -10px); opacity: 1; }
+  50% { transform: translate(-3px, -19px); opacity: .5; }
+  75% { transform: translate(-10px, -6px); opacity: .95; }
+}
+@keyframes owl-blink { 0%, 86%, 100% { transform: scaleY(0); } 90%, 93% { transform: scaleY(1); } }
+@keyframes zzz {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  20%  { opacity: .7; }
+  100% { transform: translate(-10px, -38px); opacity: 0; }
 }
 
 /* ---------- Reduce motion: everything shows at once, nothing moves ---------- */
