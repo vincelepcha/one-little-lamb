@@ -1,6 +1,6 @@
 /* One Little Lamb: offline reading after the first visit.
    Serves the saved copy straight away, and quietly refreshes it in the background. */
-var CACHE = "one-little-lamb-v4";
+var CACHE = "one-little-lamb-v5";
 var FILES = [
   "./",
   "index.html",
