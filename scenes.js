@@ -55,8 +55,8 @@
 
   /* Layered hills: a hazy far range, a middle range and the hill the lamb sits on. */
   function hills(far, mid, near) {
-    return '<path d="M-60 196 C 30 156 110 158 170 176 C 240 154 330 148 460 188 L460 420 L-60 420 Z" fill="' + far + '"/>' +
-      '<path d="M-60 212 C 50 180 140 184 210 198 C 290 182 370 180 460 204 L460 420 L-60 420 Z" fill="' + mid + '"/>' +
+    return '<path d="M-700 236 C -400 214 -200 206 -60 196 C 30 156 110 158 170 176 C 240 154 330 148 460 188 C 600 206 800 216 1100 236 L1100 1400 L-700 1400 Z" fill="' + far + '"/>' +
+      '<path d="M-700 248 C -400 230 -200 222 -60 212 C 50 180 140 184 210 198 C 290 182 370 180 460 204 C 600 220 800 230 1100 248 L1100 1400 L-700 1400 Z" fill="' + mid + '"/>' +
       '<use href="#hill" transform="translate(0 6)" fill="' + near + '"/>';
   }
   function grass(xs, y, colour) {
