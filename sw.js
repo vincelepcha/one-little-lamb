@@ -1,6 +1,7 @@
 /* One Little Lamb: offline reading after the first visit.
-   Serves the saved copy straight away, and quietly refreshes it in the background. */
-var CACHE = "one-little-lamb-v6";
+   When online, always fetches the newest copy (so updates show straight away) and saves it.
+   When offline, or if the network is very slow, reads from the saved copy. */
+var CACHE = "one-little-lamb-v7";
 var FILES = [
   "./",
   "index.html",
@@ -18,7 +19,14 @@ var FILES = [
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.open(CACHE).then(function (cache) { return cache.addAll(FILES); }).then(function () { return self.skipWaiting(); })
+    caches.open(CACHE).then(function (cache) {
+      // "reload" skips the browser's own short-term cache, so the saved copy is truly the newest.
+      return Promise.all(FILES.map(function (f) {
+        return fetch(new Request(f, { cache: "reload" })).then(function (res) {
+          if (res.ok) return cache.put(f, res);
+        });
+      }));
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
@@ -33,18 +41,21 @@ self.addEventListener("activate", function (event) {
 self.addEventListener("fetch", function (event) {
   var req = event.request;
   if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
+  var key = req.mode === "navigate" ? "index.html" : req;
 
   event.respondWith(
     caches.open(CACHE).then(function (cache) {
-      var key = req.mode === "navigate" ? "index.html" : req;
-      return cache.match(key, { ignoreSearch: true }).then(function (saved) {
-        var fresh = fetch(req).then(function (res) {
-          if (res && res.ok) cache.put(key, res.clone());
-          return res;
-        }).catch(function () { return saved; });
-        if (saved) { event.waitUntil(fresh.then(function () {}, function () {})); return saved; }
-        return fresh;
+      // (A page request can't be re-sent with new options, so fetch its address afresh.)
+      var network = fetch(req.url, { cache: "no-cache", credentials: "same-origin" }).then(function (res) {
+        if (res && res.ok) cache.put(key, res.clone());
+        return res;
       });
+      var saved = function () {
+        return cache.match(key, { ignoreSearch: true }).then(function (r) { return r || network; });
+      };
+      // Newest copy first; fall back to the saved one if offline or after 4 seconds of waiting.
+      var timeout = new Promise(function (resolve) { setTimeout(resolve, 4000); }).then(saved);
+      return Promise.race([network.catch(saved), timeout]);
     })
   );
 });

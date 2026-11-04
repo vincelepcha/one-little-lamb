@@ -252,9 +252,15 @@
   show(indexFromHash());
 
   /* Offline reading after the first visit */
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js").catch(function () {});
+      navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).catch(function () {});
+      // If a newer version of the book arrives just as it opens, show it straight away
+      // (only within the first few seconds, so a reading is never interrupted).
+      var hadController = !!navigator.serviceWorker.controller, opened = Date.now();
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (hadController && Date.now() - opened < 6000 && current === COVER) location.reload();
+      });
     });
   }
 })();
