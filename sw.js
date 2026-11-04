@@ -1,7 +1,7 @@
 /* One Little Lamb: offline reading after the first visit.
    When online, always fetches the newest copy (so updates show straight away) and saves it.
    When offline, or if the network is very slow, reads from the saved copy. */
-var CACHE = "one-little-lamb-v7";
+var CACHE = "one-little-lamb-v8";
 var FILES = [
   "./",
   "index.html",

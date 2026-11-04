@@ -133,7 +133,7 @@
     flower(78, 222, "#F4A9B6", 0) + flower(92, 219, "#FFE6B0", -1.6) + flower(286, 220, "#FFF3E6", -0.8) +
     lamb({ x: 140, y: 127, s: 1, cls: "blink wag look" });
 
-  // 1: one little lamb, curled up asleep in its basket bed under the quilt, a lantern glowing in the tree.
+  // 1: one little lamb lies down in its straw bed and falls asleep under its quilt, a lantern glowing in the tree.
   scenes["page-1"] =
     '<circle cx="306" cy="196" r="44" fill="#FFE2B8" opacity=".22"/><circle cx="306" cy="196" r="28" fill="#FFE2B8" opacity=".7"/>' +
     hills("#E4AC99", "#DA9E92", "#D29590") +
@@ -145,12 +145,10 @@
       '<rect x="99" y="144" width="14" height="18" rx="5" fill="#FFE7B8"/>' +
       '<rect x="98" y="142" width="16" height="4" rx="2" fill="#7E5A60"/><rect x="99" y="160" width="14" height="3" rx="1.5" fill="#7E5A60"/>') +
     grass([28, 306, 344], 222, "#BF8784") +
-    // the basket: back rim, the lamb, the quilt, then the basket front
-    '<ellipse cx="200" cy="194" rx="78" ry="14" fill="#8C5D45"/>' +
-    lamb({ x: 135, y: 129, s: 1, lying: true, asleep: true, blanket: true, cls: "act-bed" }) +
-    '<path d="M122 194 C 126 224 160 234 200 234 C 240 234 274 224 278 194 C 260 204 230 208 200 208 C 170 208 140 204 122 194 Z" fill="#C98E5E"/>' +
-    '<path d="M132 212 C 160 222 240 222 268 212 M140 224 C 170 230 230 230 260 224" fill="none" stroke="#B27A4E" stroke-width="2.4" stroke-linecap="round"/>' +
-    '<path d="M122 194 C 140 204 170 208 200 208 C 230 208 260 204 278 194" fill="none" stroke="#DDA676" stroke-width="5" stroke-linecap="round"/>';
+    // a soft straw bed on the grass
+    '<ellipse cx="200" cy="211" rx="74" ry="11" fill="#C9955F"/>' +
+    '<path d="M140 209 l12 -4 M162 214 l13 -5 M228 213 l13 -4 M250 208 l11 -3 M196 217 l12 -3" stroke="#AD7D4C" stroke-width="2" stroke-linecap="round"/>' +
+    lamb({ x: 140, y: 128, s: 1, lying: true, asleep: true, blanket: true, cls: "act-bed" });
 
   // 2: two little clouds drift in from either side; the lamb lifts its head to watch them.
   scenes["page-2"] =
