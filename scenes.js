@@ -53,6 +53,67 @@
     '</g></g>';
   }
 
+  /* ---------- The lamb, illustrated ----------
+     Soft shaded wool puffs, a warm face, a drooping ear and tiny legs.
+     Drawn facing left in a 140 x 100 box with its feet on y = 96.
+     o: { x, y, s, lying, asleep, flip, cls } */
+  function puff(cx, cy, r) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#g-wool)"/>'; }
+  function lamb2(o) {
+    var s = o.s || 1;
+    var place = o.flip
+      ? "translate(" + (o.x + 140 * s) + " " + o.y + ") scale(" + (-s) + " " + s + ")"
+      : "translate(" + o.x + " " + o.y + ") scale(" + s + ")";
+    var body =
+      puff(126, 48, 8) +
+      puff(62, 50, 17) + puff(100, 44, 17) + puff(80, 41, 19) + puff(114, 57, 14) +
+      puff(98, 67, 16) + puff(78, 68, 16) + puff(60, 63, 13) + puff(72, 55, 17) + puff(94, 55, 17);
+    var legs = o.lying ? "" :
+      '<g fill="url(#g-leg)">' +
+        '<rect x="58" y="70" width="10" height="26" rx="5"/><rect x="72" y="72" width="10" height="24" rx="5"/>' +
+        '<rect x="97" y="72" width="10" height="24" rx="5"/><rect x="111" y="70" width="10" height="26" rx="5"/>' +
+      '</g>';
+    var eye = o.asleep
+      ? '<path d="M26.5 45 q4.2 3.8 8.4 0" fill="none" stroke="#F4E6D6" stroke-width="2.4" stroke-linecap="round"/>'
+      : '<circle cx="30.5" cy="44" r="3.1" fill="#2B2130"/><circle cx="31.6" cy="42.9" r="1.1" fill="#FFF7EC"/>';
+    var head =
+      '<ellipse cx="55" cy="47" rx="10" ry="4.8" transform="rotate(64 55 47)" fill="#5E4B59"/>' +
+      '<ellipse cx="40" cy="46" rx="18" ry="15.5" fill="url(#g-face)"/>' +
+      '<ellipse cx="30" cy="53" rx="9.5" ry="6.5" fill="#A38F99" opacity=".45"/>' +
+      puff(29, 34, 5.5) + puff(37, 30.5, 7) + puff(46, 31, 6.5) +
+      '<circle cx="42" cy="55" r="4" fill="#F2A7A0" opacity=".55"/>' +
+      '<path d="M21.5 51.6 q3 -1.6 6 0 q-3 3 -6 0 Z" fill="#4E3A48"/>' +
+      '<path d="M24 56 q1.8 1.6 3.6 0" fill="none" stroke="#4E3A48" stroke-width="1.5" stroke-linecap="round"/>' +
+      eye;
+    return '<g transform="' + place + '"><g class="lamb2' + (o.cls ? " " + o.cls : "") + '">' +
+      '<ellipse cx="80" cy="96" rx="60" ry="7" fill="url(#g-shadow)"/>' +
+      legs +
+      '<g' + (o.lying ? ' transform="translate(0 12)"' : "") + '><g class="lb-breathe">' + body + '</g></g>' +
+      '<g' + (o.lying ? ' transform="translate(4 18) rotate(-8 40 46)"' : "") + '>' + head + '</g>' +
+    '</g></g>';
+  }
+
+  /* Layered hills: a hazy far range, a middle range and the hill the lamb sits on. */
+  function hills(far, mid, near) {
+    return '<path d="M-60 196 C 30 156 110 158 170 176 C 240 154 330 148 460 188 L460 420 L-60 420 Z" fill="' + far + '"/>' +
+      '<path d="M-60 212 C 50 180 140 184 210 198 C 290 182 370 180 460 204 L460 420 L-60 420 Z" fill="' + mid + '"/>' +
+      '<use href="#hill" transform="translate(0 6)" fill="' + near + '"/>';
+  }
+  function grass(xs, y, colour) {
+    return xs.map(function (x, n) {
+      return amb("a-sway", '<path d="M' + x + ' ' + y + ' q-2 -7 -5 -10 M' + x + ' ' + y + ' q1 -8 3 -12 M' + x + ' ' + y + ' q3 -6 7 -8" fill="none" stroke="' + colour + '" stroke-width="2" stroke-linecap="round"/>',
+        "animation-delay:" + (-n * 0.9) + "s");
+    }).join("");
+  }
+  function tree(x, ground, h, canopy, trunk, lean) {
+    return '<path d="M' + (x - 5) + ' ' + ground + ' C ' + (x - 4) + ' ' + (ground - h * .5) + ' ' + (x + lean) + ' ' + (ground - h * .8) + ' ' + (x + lean) + ' ' + (ground - h) +
+      ' L ' + (x + lean + 6) + ' ' + (ground - h) + ' C ' + (x + lean + 5) + ' ' + (ground - h * .7) + ' ' + (x + 5) + ' ' + (ground - h * .45) + ' ' + (x + 6) + ' ' + ground + ' Z" fill="' + trunk + '"/>' +
+      amb("a-canopy",
+        '<circle cx="' + (x + lean - 18) + '" cy="' + (ground - h - 2) + '" r="24" fill="' + canopy[1] + '"/>' +
+        '<circle cx="' + (x + lean + 22) + '" cy="' + (ground - h + 2) + '" r="22" fill="' + canopy[1] + '"/>' +
+        '<circle cx="' + (x + lean + 2) + '" cy="' + (ground - h - 18) + '" r="30" fill="' + canopy[0] + '"/>' +
+        '<circle cx="' + (x + lean - 8) + '" cy="' + (ground - h - 28) + '" r="11" fill="#FFFFFF" opacity=".08"/>');
+  }
+
   /* ---------- Small helpers ---------- */
   function hill(fill) { return '<use href="#hill" fill="' + fill + '"/>'; }
   function use(id, x, y, w, h, extra) {
@@ -98,22 +159,40 @@
   }
   var scenes = {};
 
-  // Cover: the lamb stands on the hill at sunset, awake, looking about.
+  // Cover: the lamb stands on its hill at sunset, with its tree and a few flowers.
   scenes.cover =
-    '<circle cx="300" cy="206" r="60" fill="#FFE2B8" opacity=".25"/><circle cx="300" cy="206" r="40" fill="#FFE2B8" opacity=".85"/>' +
-    amb("a-drift", use("cloud", 26, 40, 96, 50, ' opacity=".7"')) +
-    amb("a-drift a-drift-back", use("cloud", 250, 22, 64, 34, ' opacity=".55"')) +
-    hill("#D9A08F") +
-    flower(64, 216, "#F4A9B6", 0) + flower(80, 213, "#FFE6B0", -1.6) +
-    flower(332, 214, "#F4A9B6", -0.8) + flower(348, 217, "#FFF3E6", -2.4) +
-    littleLamb({ cls: "blink wag look" });
+    '<circle cx="290" cy="156" r="66" fill="#FFE2B8" opacity=".2"/><circle cx="290" cy="156" r="48" fill="#FFE2B8" opacity=".32"/>' +
+    '<circle cx="290" cy="156" r="34" fill="#FFEBC4"/>' +
+    '<g fill="#FBDCC6" opacity=".7"><rect x="196" y="120" width="120" height="9" rx="4.5"/><rect x="232" y="134" width="96" height="7" rx="3.5"/><rect x="30" y="96" width="104" height="8" rx="4"/></g>' +
+    amb("a-drift", use("cloud", 40, 54, 96, 50, ' opacity=".6"')) +
+    '<path d="M150 88 q5 -5 10 0 q5 -5 10 0 M178 72 q4 -4 8 0 q4 -4 8 0" fill="none" stroke="#A97A80" stroke-width="2" stroke-linecap="round" opacity=".7"/>' +
+    hills("#EBB7A1", "#E2A795", "#D9A08F") +
+    tree(330, 212, 66, ["#C98C86", "#BD7F7E"], "#A87272", -4) +
+    grass([96, 128, 262, 300], 214, "#C88C84") +
+    flower(78, 222, "#F4A9B6", 0) + flower(92, 219, "#FFE6B0", -1.6) + flower(286, 220, "#FFF3E6", -0.8) +
+    lamb2({ x: 137, y: 125, s: 0.9 });
 
-  // 1: the lamb yawns, lies down in its straw bed and closes its eyes; a little quilt settles over it.
+  // 1: one little lamb, curled up asleep in its basket bed under the quilt, a lantern glowing in the tree.
   scenes["page-1"] =
-    hill("#D29590") +
-    '<ellipse cx="200" cy="207" rx="72" ry="12" fill="#C9955F"/>' +
-    '<path d="M140 205 l12 -4 M162 210 l13 -5 M228 209 l13 -4 M250 204 l11 -3 M196 213 l12 -3" stroke="#AD7D4C" stroke-width="2" stroke-linecap="round"/>' +
-    littleLamb({ lying: true, asleep: true, blanket: true, cls: "act-bed" });
+    '<circle cx="306" cy="196" r="44" fill="#FFE2B8" opacity=".22"/><circle cx="306" cy="196" r="28" fill="#FFE2B8" opacity=".7"/>' +
+    hills("#E4AC99", "#DA9E92", "#D29590") +
+    tree(66, 214, 84, ["#C5867F", "#B67479"], "#9E6A70", 6) +
+    '<path d="M70 132 C 84 128 98 128 108 132" fill="none" stroke="#9E6A70" stroke-width="4" stroke-linecap="round"/>' +
+    amb("a-lantern",
+      '<ellipse cx="106" cy="154" rx="26" ry="26" fill="url(#g-warm)"/>' +
+      '<path d="M106 132 V 144" stroke="#7E5A60" stroke-width="1.6"/>' +
+      '<rect x="99" y="144" width="14" height="18" rx="5" fill="#FFE7B8"/>' +
+      '<rect x="98" y="142" width="16" height="4" rx="2" fill="#7E5A60"/><rect x="99" y="160" width="14" height="3" rx="1.5" fill="#7E5A60"/>') +
+    grass([28, 306, 344], 222, "#BF8784") +
+    // the basket: back rim, the lamb, the quilt, then the basket front
+    '<ellipse cx="200" cy="194" rx="78" ry="14" fill="#8C5D45"/>' +
+    lamb2({ x: 124, y: 116, s: 0.9, lying: true, asleep: true }) +
+    '<path d="M206 204 C 208 186 220 176 236 174 C 254 172 268 180 274 190 L 278 198 C 256 206 230 208 206 204 Z" fill="#CF97AE"/>' +
+    '<path d="M208 194 C 214 182 224 176 236 174 C 254 172 268 180 274 190" fill="none" stroke="#E7BCCB" stroke-width="4" stroke-linecap="round"/>' +
+    '<g fill="#F6DDE6" opacity=".9"><circle cx="226" cy="190" r="1.7"/><circle cx="244" cy="184" r="1.7"/><circle cx="260" cy="188" r="1.7"/><circle cx="236" cy="199" r="1.7"/><circle cx="256" cy="199" r="1.7"/></g>' +
+    '<path d="M122 194 C 126 224 160 234 200 234 C 240 234 274 224 278 194 C 260 204 230 208 200 208 C 170 208 140 204 122 194 Z" fill="#C98E5E"/>' +
+    '<path d="M132 212 C 160 222 240 222 268 212 M140 224 C 170 230 230 230 260 224" fill="none" stroke="#B27A4E" stroke-width="2.4" stroke-linecap="round"/>' +
+    '<path d="M122 194 C 140 204 170 208 200 208 C 230 208 260 204 278 194" fill="none" stroke="#DDA676" stroke-width="5" stroke-linecap="round"/>';
 
   // 2: two little clouds drift in from either side; the lamb lifts its head to watch them.
   scenes["page-2"] =
