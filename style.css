@@ -229,8 +229,7 @@ body {
 
 /* ---------- The lamb's resting poses ---------- */
 
-.lamb *, .amb, .owl-lids, .lb-breathe { transform-box: fill-box; }
-.lb-breathe { transform-origin: 50% 100%; }
+.lamb *, .amb, .owl-lids { transform-box: fill-box; }
 .l-legs  { transform-origin: 50% 0; }
 .l-body  { transform-origin: 50% 100%; }
 .l-breathe { transform-origin: 50% 100%; }
@@ -423,7 +422,6 @@ body.is-asleep .btn-back { opacity: .3; transition: opacity 12s ease; }
   .is-current .act-gaze .l-head { animation: gaze .8s ease-in-out .2s both; }
   .is-current .act-stargaze .l-head { animation: gaze-high 1s ease-in-out .2s both; }
 
-  .is-current .lamb2 .lb-breathe { animation: breathe 2.8s ease-in-out infinite alternate; }
   .is-current .a-canopy { animation: canopy 6s ease-in-out infinite alternate; transform-origin: 50% 100%; }
   .is-current .a-lantern { animation: lantern 5s ease-in-out infinite alternate; transform-origin: 50% 0; }
   .is-current .a-drift { animation: drift 26s ease-in-out infinite alternate; }

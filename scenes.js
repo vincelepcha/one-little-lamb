@@ -1,6 +1,6 @@
 /* One Little Lamb: the drawings.
-   Every page is its own little scene, drawn as inline SVG. The same lamb (and its mother)
-   appear throughout, built from one shared drawing so they always look like the same characters.
+   Every page is its own little scene, drawn as inline SVG. The same little lamb appears
+   throughout, built from one shared drawing so it always looks like the same character.
    Gentle movement (breathing, blinking, a wagging tail) is in style.css and switches off with "reduce motion". */
 (function () {
   "use strict";
@@ -50,45 +50,6 @@
           '<path class="l-eye-closed" d="M17 34.5 q4.5 4 9 0" fill="none" stroke="#F4E6D6" stroke-width="2.2" stroke-linecap="round"/>' +
         '</g>' +
       '</g>' +
-    '</g></g>';
-  }
-
-  /* ---------- The lamb, illustrated ----------
-     Soft shaded wool puffs, a warm face, a drooping ear and tiny legs.
-     Drawn facing left in a 140 x 100 box with its feet on y = 96.
-     o: { x, y, s, lying, asleep, flip, cls } */
-  function puff(cx, cy, r) { return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#g-wool)"/>'; }
-  function lamb2(o) {
-    var s = o.s || 1;
-    var place = o.flip
-      ? "translate(" + (o.x + 140 * s) + " " + o.y + ") scale(" + (-s) + " " + s + ")"
-      : "translate(" + o.x + " " + o.y + ") scale(" + s + ")";
-    var body =
-      puff(126, 48, 8) +
-      puff(62, 50, 17) + puff(100, 44, 17) + puff(80, 41, 19) + puff(114, 57, 14) +
-      puff(98, 67, 16) + puff(78, 68, 16) + puff(60, 63, 13) + puff(72, 55, 17) + puff(94, 55, 17);
-    var legs = o.lying ? "" :
-      '<g fill="url(#g-leg)">' +
-        '<rect x="58" y="70" width="10" height="26" rx="5"/><rect x="72" y="72" width="10" height="24" rx="5"/>' +
-        '<rect x="97" y="72" width="10" height="24" rx="5"/><rect x="111" y="70" width="10" height="26" rx="5"/>' +
-      '</g>';
-    var eye = o.asleep
-      ? '<path d="M26.5 45 q4.2 3.8 8.4 0" fill="none" stroke="#F4E6D6" stroke-width="2.4" stroke-linecap="round"/>'
-      : '<circle cx="30.5" cy="44" r="3.1" fill="#2B2130"/><circle cx="31.6" cy="42.9" r="1.1" fill="#FFF7EC"/>';
-    var head =
-      '<ellipse cx="55" cy="47" rx="10" ry="4.8" transform="rotate(64 55 47)" fill="#5E4B59"/>' +
-      '<ellipse cx="40" cy="46" rx="18" ry="15.5" fill="url(#g-face)"/>' +
-      '<ellipse cx="30" cy="53" rx="9.5" ry="6.5" fill="#A38F99" opacity=".45"/>' +
-      puff(29, 34, 5.5) + puff(37, 30.5, 7) + puff(46, 31, 6.5) +
-      '<circle cx="42" cy="55" r="4" fill="#F2A7A0" opacity=".55"/>' +
-      '<path d="M21.5 51.6 q3 -1.6 6 0 q-3 3 -6 0 Z" fill="#4E3A48"/>' +
-      '<path d="M24 56 q1.8 1.6 3.6 0" fill="none" stroke="#4E3A48" stroke-width="1.5" stroke-linecap="round"/>' +
-      eye;
-    return '<g transform="' + place + '"><g class="lamb2' + (o.cls ? " " + o.cls : "") + '">' +
-      '<ellipse cx="80" cy="96" rx="60" ry="7" fill="url(#g-shadow)"/>' +
-      legs +
-      '<g' + (o.lying ? ' transform="translate(0 12)"' : "") + '><g class="lb-breathe">' + body + '</g></g>' +
-      '<g' + (o.lying ? ' transform="translate(4 18) rotate(-8 40 46)"' : "") + '>' + head + '</g>' +
     '</g></g>';
   }
 
@@ -170,7 +131,7 @@
     tree(330, 212, 66, ["#C98C86", "#BD7F7E"], "#A87272", -4) +
     grass([96, 128, 262, 300], 214, "#C88C84") +
     flower(78, 222, "#F4A9B6", 0) + flower(92, 219, "#FFE6B0", -1.6) + flower(286, 220, "#FFF3E6", -0.8) +
-    lamb2({ x: 137, y: 125, s: 0.9 });
+    lamb({ x: 140, y: 127, s: 1, cls: "blink wag look" });
 
   // 1: one little lamb, curled up asleep in its basket bed under the quilt, a lantern glowing in the tree.
   scenes["page-1"] =
@@ -186,10 +147,7 @@
     grass([28, 306, 344], 222, "#BF8784") +
     // the basket: back rim, the lamb, the quilt, then the basket front
     '<ellipse cx="200" cy="194" rx="78" ry="14" fill="#8C5D45"/>' +
-    lamb2({ x: 124, y: 116, s: 0.9, lying: true, asleep: true }) +
-    '<path d="M206 204 C 208 186 220 176 236 174 C 254 172 268 180 274 190 L 278 198 C 256 206 230 208 206 204 Z" fill="#CF97AE"/>' +
-    '<path d="M208 194 C 214 182 224 176 236 174 C 254 172 268 180 274 190" fill="none" stroke="#E7BCCB" stroke-width="4" stroke-linecap="round"/>' +
-    '<g fill="#F6DDE6" opacity=".9"><circle cx="226" cy="190" r="1.7"/><circle cx="244" cy="184" r="1.7"/><circle cx="260" cy="188" r="1.7"/><circle cx="236" cy="199" r="1.7"/><circle cx="256" cy="199" r="1.7"/></g>' +
+    lamb({ x: 135, y: 129, s: 1, lying: true, asleep: true, blanket: true, cls: "act-bed" }) +
     '<path d="M122 194 C 126 224 160 234 200 234 C 240 234 274 224 278 194 C 260 204 230 208 200 208 C 170 208 140 204 122 194 Z" fill="#C98E5E"/>' +
     '<path d="M132 212 C 160 222 240 222 268 212 M140 224 C 170 230 230 230 260 224" fill="none" stroke="#B27A4E" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M122 194 C 140 204 170 208 200 208 C 230 208 260 204 278 194" fill="none" stroke="#DDA676" stroke-width="5" stroke-linecap="round"/>';
