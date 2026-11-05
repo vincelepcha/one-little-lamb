@@ -63,13 +63,19 @@ one-little-lamb/
 
 ## Running locally
 
-No install needed. Serve the folder with any static server:
+There's nothing to install or build. Get the files, then serve the folder with any static web server. Python's built-in one is the quickest:
 
 ```bash
+git clone https://github.com/vincelepcha/one-little-lamb.git
+cd one-little-lamb
 python3 -m http.server 8000
 ```
 
-Then open <http://localhost:8000>. Offline mode also runs on `localhost`.
+Then open <http://localhost:8000>. Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to stop the server.
+
+- On Windows, use `python -m http.server 8000` (or `py -m http.server 8000`). Python must be installed.
+- Offline reading works on `localhost` too, so you can test it by turning off your connection and reloading.
+- Opening `index.html` directly (double-clicking it) shows the book, but offline reading and home-screen install need a server.
 
 ## Publishing changes
 
